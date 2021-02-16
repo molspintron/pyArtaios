@@ -1,3 +1,15 @@
+# Results from Examples
+examples/00_h2_bridge/artaios*
+examples/01_closed_shell/artaios*
+examples/02_open_shell/artaios*
+examples/03_turbomole_closed_shell/artaios*
+examples/04_turbomole_open_shell/artaios*
+examples/05_cross_conf/artaios*
+*.pov
+
+# temporary files
+*.swp
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
