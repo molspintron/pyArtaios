@@ -103,21 +103,3 @@ Even though for the results a getter function exists (`pyartaios.get('keyword')`
 |right | list of atoms for right electrode|
 |results | dictionary with results|
 
-## TODOs
-
-- [x] add turbomole support
-- [x] add calculation of subsystem MOs (closed shell)
-- [x] add read in of subsystem MO energies (closed shell)
-- [ ] add calculation of subsystem MOs (open shell)
-- [ ] add read in of subsystem MO energies (open shell)
-- [x] add calculation of local transmissions (closed shell)
-- [x] add visualization of local transmission (closed shell)
-- [ ] add calculation of local transmissions (open shell)
-- [ ] add visualization of local transmission (open shell)
-- [x] update readme
-- [ ] add visualization tools
-- [ ] add jgreen
-- [ ] add switch for existing QC calculation, so existing calculations can be reused
-- [ ] read MO energies for turbomole, cclib a problem with two-character elements, see https://github.com/cclib/cclib/pull/780
-- [ ] find solution for printing information/status message - is that in order with python conventions?
-- [ ] add config/path info for QC programs (gaussian, turbomole, artaios), so that this no only runs on our systems

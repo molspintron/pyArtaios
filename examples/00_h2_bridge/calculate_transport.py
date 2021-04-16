@@ -1,6 +1,6 @@
 import sys
 # adjust path
-sys.path.append("/home/deffner/code/pyartaios")
+sys.path.append("/home/deffner/code/pyArtaios")
 import pyArtaios as pa
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +14,7 @@ natoms, atoms, coords = pa.read_xyz('input.xyz')
 # pa.write_coord(natoms, atoms, coords)
 
 # define settings
-settings = {'charge' : -1, 'multi' : 2, 'basis set': 'def2svp', 'qcprog': 'gaussian', 'method' : 'dft', 'functional' : 'bp86', 'n cores': 1, 'elow': -12, 'eupp': 2, 'esteps' : 2}
+settings = {'charge' : -1, 'multi' : 2, 'spin' : 2, 'basis set': 'def2svp', 'qcprog': 'gaussian', 'method' : 'dft', 'functional' : 'bp86', 'n cores': 1, 'elow': -12, 'eupp': 2, 'esteps' : 2}
 
 # create object
 transport = pa.artaios(natoms, atoms, coords, settings)

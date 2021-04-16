@@ -30,7 +30,7 @@ def write_coord(natoms, atoms, coords, freeze = [], filename='coord'):
     coordfile.write('$end\n')
 
 
-def write_transportin(settings, left, central, right, filename = 'transport'):
+def write_transportin(settings, left, central, right, filename = 'transport', subsys = False):
     '''Writes transport.in file according to settings and partitioning
 
     Parameters:
@@ -54,8 +54,6 @@ def write_transportin(settings, left, central, right, filename = 'transport'):
     # Block: general
     target.write('$general \n')
     target.write(' rbas\n')
-    target.write(' do_transport \n')
-
     if settings['qcprog'].lower() == 'gaussian':
         target.write(' qcprog g09 \n')
         target.write(' mosfile '+filename+'.log \n')
@@ -66,50 +64,72 @@ def write_transportin(settings, left, central, right, filename = 'transport'):
         else:
             target.write(' mosfile dscf.out\n')
 
-    target.write(' ham_conv 27.21 \n')
-    if settings['print green']:
-        target.write(' print_green\n')
-    if settings['read green']:
-        target.write(' read_green\n')
-    target.write(' loewdin_central\n')
+    ## for transport
+    if settings['job type'] == 'transport':
+        target.write(' do_transport \n')
+        target.write(' ham_conv 27.21 \n')
+        if settings['print green']:
+            target.write(' print_green\n')
+        if settings['read green']:
+            target.write(' read_green\n')
+        target.write(' loewdin_central\n')
+
+    ## for jgreen
+    elif settings['job type'] == 'jgreen':
+        target.write(' do_jgreen\n')
+        target.write(' nelalpha '+str(settings['nelalpha'])+'\n')
+        target.write(' nelbeta '+str(settings['nelbeta'])+'\n')
+        target.write(' s_a '+str(settings['s_a'])+'\n')
+        target.write(' s_b '+str(settings['s_b'])+'\n')
+
     target.write('$end \n')
     target.write('\n')
 
     # Block: partitioning
     target.write('$partitioning \n')
     target.write(' leftatoms '   +",".join(map(str, part_l))+'\n')
-    target.write(' centralatoms '+",".join(map(str, part_c))+'\n')
+    if settings['job type'] == 'transport':
+        target.write(' centralatoms '+",".join(map(str, part_c))+'\n')
     target.write(' rightatoms '  +",".join(map(str, part_r))+'\n')
-    target.write('$end \n')
-    target.write('\n')
-
-    # Block: energy_range
-    target.write('$energy_range \n')
-    target.write(' start '+str(settings['elow'])+'\n')
-    target.write(' end '  +str(settings['eupp'])+'\n')
-    target.write(' steps '+str(settings['esteps'])+'\n')
     target.write('$end \n')
     target.write('\n')
 
     # Block: system
     target.write('$system \n')
-    target.write(' nspin '+str(settings['multi'])+'\n')
+    target.write(' nspin '+str(settings['spin'])+'\n')
     target.write('$end \n')
     target.write('\n')
 
-    # Block: electrodes
-    target.write('$electrodes \n')
-    target.write(' fermi_level '+str(settings['fermi'])+'\n')
-    target.write(' self_energy wbl \n')
-    target.write(' dos_s 0.036 \n')
-    target.write('$end \n')
-    target.write('\n')
+    if settings['job type'] == 'transport':
+        # Block: energy_range
+        target.write('$energy_range \n')
+        target.write(' start '+str(settings['elow'])+'\n')
+        target.write(' end '  +str(settings['eupp'])+'\n')
+        target.write(' steps '+str(settings['esteps'])+'\n')
+        target.write('$end \n')
+        target.write('\n')
 
-    # Block: local transmissions
-    target.write('$local_transmission\n')
-    target.write(' bondflux\n')
-    target.write('$end\n')
-    target.write('\n')
+        # Block: electrodes
+        target.write('$electrodes \n')
+        target.write(' fermi_level '+str(settings['fermi'])+'\n')
+        target.write(' self_energy wbl \n')
+        target.write(' dos_s 0.036 \n')
+        target.write('$end \n')
+        target.write('\n')
+
+        if subsys:
+            target.write('$subsystem\n')
+            target.write(' print_molden\n')
+            target.write(' do_diag_central\n')
+            target.write(' moldeninfile molden.input\n')
+            target.write('$end \n')
+            target.write('\n')
+        else:
+            # Block: local transmissions
+            target.write('$local_transmission\n')
+            target.write(' bondflux\n')
+            target.write('$end\n')
+            target.write('\n')
 
     if settings['qcprog'] == 'turbomole':
         target.write('$debug\n')
@@ -118,7 +138,6 @@ def write_transportin(settings, left, central, right, filename = 'transport'):
 
     target.write('\n')
     target.close()
-
 
 def read_xyz(filename):
     '''Reads an xyz file and returns the structure.

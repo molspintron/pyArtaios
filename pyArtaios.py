@@ -84,7 +84,7 @@ class artaios:
             # perform necessary single point calculation
             print('perform single point calculation...', flush = True)
             self._singlepoint()
-
+            print('successfully performed single point calculation', flush = True)
             # get mo energies and approx. Fermi level from junction
             try:
                 self._get_mo_energies()
@@ -362,9 +362,10 @@ class artaios:
             if self.settings['spin'] == 1:
                 sb.call(['tm2unformcl'])
             else:
+                print('calling tm2unformop', os.getcwd(), flush = True)
                 sb.call(['tm2unformop'])
                 sb.call(['mv', 'overlap.1', 'overlap'])
-
+                print('done calling tm2unformop', flush = True)
 
     def _default_settings(self):
         '''initialize default settings'''
