@@ -382,8 +382,8 @@ class artaios:
         self.settings['method'] = 'dft'         # type of qc calculation
         self.settings['ri']     = False         # switch for density fitting
         self.settings['job type'] = 'transport'
-        self.settings['path tm'] = '/home/software/qc-prog/TURBOMOLE6.6/bin/em64t-unknown-linux-gnu_smp/'
-        self.settings['path g09'] = 'g09'
+        self.settings['path tm'] = ''
+        self.settings['path g09'] = ''
         self.settings['path artaios'] = 'artaios'
 
         # settings for transport calculations
