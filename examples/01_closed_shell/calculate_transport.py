@@ -1,6 +1,6 @@
 import sys
 # adjust path
-sys.path.append("/home/deffner/code/pyartaios")
+sys.path.append("/home/deffner/code/pyArtaios")
 import pickle
 import numpy as np
 import pyArtaios as pa

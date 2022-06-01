@@ -24,6 +24,38 @@ transport.calculate()
 transmission = transport.get('transmission')
 ```
 
+## Requirements
+
+pyArtaios needs ARTAIOS installed on your system, and it needs to be able to find the executables. Since it can start Gaussian and Turbomole calculations by itself, it needs to find those as well. The way these things are hardcoded right now is far from perfect, but will change in the future. Here is a list of executables, pyArtaios tries to execute:
+
+| `artaios` | Artaios itself|
+| `g09_2unform` | part of Artaios, to extract matrices from Gaussian calcualtions|
+| `tm2unformcl` | part of Artaios, to extract matrices from Turbomole calculations (closed shell)|
+| `tm2unformop` | part of Artaios, to extract matrices from Turbomole calculations (open shell)|
+
+For Calculations involving Turbomole:
+
+| `ridft / dscf` | TM single point calculations, path to executable can be specified with `settings['path tm']`. Right now, it tries to execute `ridft_smp` or `dscf_omp`. Adjust this to your liking in `pyArtaios._singlepoint()`. |
+| `tm2molden` | part of Turbomole, to extract a molden file for calculations of subsystems |
+
+For Calculations involving Gaussian:
+
+| `g09` | Gaussian executable |
+
+This is messy, so it is advised to change the code according to your system. Future developments will include more flexibel and appropriate ways of linking executables
+
+### python Libraries
+
+Following python libraries are needed:
+
+- numpy
+- subprocess
+- cclib (for for analyzing output files from calculations)
+- os
+- matplotlib (for the interactive plotting of the local transmissions some fancy stuff is needed, like some imports from matplotlib.widges and mpl_toolkits. Make sure you have an up-to-date version of matplotlib)
+
+
+
 ## Adding the library to the python path
 
 There are two ways to make the pyArtaios library findable for python on your system. The first way is to add it to the `$PYTHONPATH` variable in the `.bashrc` by adding the line `export PYTHONPATH=/home/<username>/<path to your local git>`. But, and this is crucial: **We have to be careful with the file and functionnames!** If somebody creates a file 'numpy', this would overwrite all `numpy` functionalities, since now two python modules exist with that name.
